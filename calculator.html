@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Calculator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    body {
+      background: linear-gradient(160deg, #0f0f1a 0%, #1a1a2e 40%, #16213e 100%);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'SF Pro Display', 'Inter', 'Segoe UI', system-ui, sans-serif;
+      padding: 12px;
+      margin: 0;
+    }
+
+    .calculator {
+      background: rgba(18, 18, 30, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 32px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      padding: 20px 16px 16px;
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .display {
+      background: #0a0a14;
+      border-radius: 24px;
+      padding: 18px 16px 12px;
+      box-shadow: inset 0 6px 12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.03);
+      min-height: 85px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+    }
+
+    .display-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      text-align: right;
+      font-size: 2.6rem;
+      font-weight: 400;
+      color: #f0f3fc;
+      letter-spacing: 0.5px;
+      font-family: 'SF Mono', 'JetBrains Mono', 'Inter', monospace;
+      caret-color: transparent;
+      padding: 0;
+      line-height: 1.2;
+      word-break: break-all;
+    }
+
+    .scientific-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+    }
+
+    .btn {
+      background: #1e2035;
+      border: none;
+      border-radius: 20px;
+      aspect-ratio: 1 / 1;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #e2e6f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 14px -6px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.03), inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+      transition: all 0.12s ease;
+      letter-spacing: 0.3px;
+    }
+
+    .btn:active {
+      transform: scale(0.9);
+      background: #282c44;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.7), inset 0 2px 5px rgba(0, 0, 0, 0.5);
+      transition: 0.05s;
+    }
+
+    .btn.sci {
+      background: #252840;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #b9c2e0;
+      border-radius: 18px;
+      aspect-ratio: auto;
+      height: 44px;
+    }
+
+    .btn.operator {
+      background: #f0a500;
+      color: #12121f;
+      font-weight: 700;
+      box-shadow: 0 10px 18px -8px rgba(240, 165, 0, 0.35), 0 0 0 1px rgba(240, 165, 0, 0.2);
+    }
+
+    .btn.operator:active {
+      background: #d89400;
+    }
+
+    .btn.clear-entry {
+      background: #4a3550;
+      color: #f0c8d8;
+      font-weight: 600;
+    }
+
+    .btn.equal {
+      background: #e94560;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.8rem;
+      box-shadow: 0 10px 20px -6px rgba(233, 69, 96, 0.5), 0 0 0 1px rgba(233, 69, 96, 0.25);
+    }
+
+    .btn.equal:active {
+      background: #c73a50;
+    }
+
+    .signature {
+      text-align: center;
+      font-size: 0.7rem;
+      color: #4e5470;
+      font-weight: 400;
+      letter-spacing: 0.8px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 400px) {
+      .calculator {
+        padding: 14px 10px 12px;
+        gap: 10px;
+        border-radius: 28px;
+        max-width: 100%;
+      }
+      .btn {
+        font-size: 1.1rem;
+        border-radius: 16px;
+      }
+      .btn.sci {
+        font-size: 0.85rem;
+        height: 38px;
+      }
+      .display-input {
+        font-size: 2.2rem;
+      }
+      .display {
+        padding: 14px 12px 10px;
+        border-radius: 20px;
+        min-height: 75px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display">
+      <input type="text" class="display-input" id="display" placeholder="0" readonly>
+    </div>
+
+    <div class="scientific-row">
+      <button class="btn sci" id="sqrt">√</button>
+      <button class="btn sci" id="square">x²</button>
+      <button class="btn sci" id="power">xʸ</button>
+      <button class="btn sci" id="factorial">!</button>
+      <button class="btn sci" id="pi">π</button>
+    </div>
+
+    <div class="buttons-grid">
+      <button class="btn clear-entry" id="clearEntry">CE</button>
+      <button class="btn" id="clear">C</button>
+      <button class="btn" id="backspace">⌫</button>
+      <button class="btn operator" id="divide">÷</button>
+
+      <button class="btn" id="seven">7</button>
+      <button class="btn" id="eight">8</button>
+      <button class="btn" id="nine">9</button>
+      <button class="btn operator" id="multiply">×</button>
+
+      <button class="btn" id="four">4</button>
+      <button class="btn" id="five">5</button>
+      <button class="btn" id="six">6</button>
+      <button class="btn operator" id="subtract">−</button>
+
+      <button class="btn" id="one">1</button>
+      <button class="btn" id="two">2</button>
+      <button class="btn" id="three">3</button>
+      <button class="btn operator" id="add">+</button>
+
+      <button class="btn" id="zero">0</button>
+      <button class="btn" id="decimal">.</button>
+      <button class="btn" id="percent">%</button>
+      <button class="btn equal" id="equals">=</button>
+    </div>
+    <div class="signature">made by Doma</div>
+  </div>
+
+  <script>
+    (function() {
+      const display = document.getElementById('display');
+      
+      let currentOperand = '0';
+      let previousOperand = '';
+      let operation = null;
+      let shouldResetDisplay = false;
+      let waitingForExponent = false;
+      let exponentBase = null;
+
+      function updateDisplay() {
+        display.value = currentOperand;
+      }
+
+      function clearAll() {
+        currentOperand = '0';
+        previousOperand = '';
+        operation = null;
+        shouldResetDisplay = false;
+        waitingForExponent = false;
+        exponentBase = null;
+        updateDisplay();
+      }
+
+      function clearEntry() {
+        currentOperand = '0';
+        shouldResetDisplay = false;
+        waitingForExponent = false;
+        updateDisplay();
+      }
+
+      function backspace() {
+        if (waitingForExponent) {
+          waitingForExponent = false;
+          currentOperand = exponentBase !== null ? String(exponentBase) : '0';
+          exponentBase = null;
+          updateDisplay();
+          return;
+        }
+        if (shouldResetDisplay) return;
+        if (currentOperand.length === 1) {
+          currentOperand = '0';
+        } else if (currentOperand.length > 1) {
+          currentOperand = currentOperand.slice(0, -1);
+        }
+        updateDisplay();
+      }
+
+      function appendNumber(num) {
+        if (waitingForExponent) {
+          currentOperand = '';
+          waitingForExponent = false;
+          shouldResetDisplay = false;
+        }
+        if (shouldResetDisplay) {
+          currentOperand = '';
+          shouldResetDisplay = false;
+        }
+        if (num === '.' && currentOperand.includes('.')) return;
+        if (currentOperand === '0' && num !== '.') {
+          currentOperand = num;
+        } else {
+          currentOperand += num;
+        }
+        updateDisplay();
+      }
+
+      function appendPi() {
+        if (shouldResetDisplay || waitingForExponent) {
+          currentOperand = '';
+          shouldResetDisplay = false;
+          waitingForExponent = false;
+        }
+        currentOperand = String(Math.PI);
+        updateDisplay();
+      }
+
+      function factorial(n) {
+        if (n < 0 || !Number.isInteger(n)) return NaN;
+        if (n === 0 || n === 1) return 1;
+        if (n > 170) return Infinity;
+        let result = 1;
+        for (let i = 2; i <= n; i++) {
+          result *= i;
+        }
+        return result;
+      }
+
+      function computeUnary(type) {
+        let value = parseFloat(currentOperand);
+        if (isNaN(value)) return;
+        let result;
+        switch (type) {
+          case 'sqrt':
+            if (value < 0) {
+              alert('Invalid input for square root');
+              return;
+            }
+            result = Math.sqrt(value);
+            break;
+          case 'square':
+            result = value * value;
+            break;
+          case 'factorial':
+            if (!Number.isInteger(value) || value < 0) {
+              alert('Factorial requires non-negative integer');
+              return;
+            }
+            result = factorial(value);
+            if (isNaN(result)) return;
+            break;
+        }
+        currentOperand = String(result);
+        shouldResetDisplay = true;
+        waitingForExponent = false;
+        updateDisplay();
+      }
+
+      function startPower() {
+        if (waitingForExponent) return;
+        const value = parseFloat(currentOperand);
+        if (isNaN(value)) return;
+        exponentBase = value;
+        waitingForExponent = true;
+        currentOperand = value + ' ^ ';
+        updateDisplay();
+      }
+
+      function computeResult() {
+        if (waitingForExponent && exponentBase !== null) {
+          const expMatch = currentOperand.match(/[\d.]+$/);
+          if (expMatch) {
+            const exponent = parseFloat(expMatch[0]);
+            if (!isNaN(exponent)) {
+              currentOperand = String(Math.pow(exponentBase, exponent));
+              exponentBase = null;
+              waitingForExponent = false;
+              shouldResetDisplay = true;
+              updateDisplay();
+              return;
+            }
+          }
+          return;
+        }
+        
+        if (operation === null || shouldResetDisplay) return;
+        
+        const prev = parseFloat(previousOperand);
+        const curr = parseFloat(currentOperand);
+        if (isNaN(prev) || isNaN(curr)) return;
+        
+        let result;
+        switch (operation) {
+          case 'add':
+            result = prev + curr;
+            break;
+          case 'subtract':
+            result = prev - curr;
+            break;
+          case 'multiply':
+            result = prev * curr;
+            break;
+          case 'divide':
+            if (curr === 0) {
+              alert('Cannot divide by zero');
+              clearAll();
+              return;
+            }
+            result = prev / curr;
+            break;
+        }
+        
+        currentOperand = String(result);
+        previousOperand = '';
+        operation = null;
+        shouldResetDisplay = true;
+        updateDisplay();
+      }
+
+      function chooseOperation(op) {
+        if (waitingForExponent && exponentBase !== null) {
+          const expMatch = currentOperand.match(/[\d.]+$/);
+          if (expMatch) {
+            const exponent = parseFloat(expMatch[0]);
+            if (!isNaN(exponent)) {
+              currentOperand = String(Math.pow(exponentBase, exponent));
+              exponentBase = null;
+              waitingForExponent = false;
+              shouldResetDisplay = true;
+              updateDisplay();
+            }
+          }
+        }
+
+        if (currentOperand === '0' && previousOperand === '') return;
+        
+        if (previousOperand !== '' && operation && !shouldResetDisplay) {
+          computeResult();
+        }
+        
+        operation = op;
+        previousOperand = currentOperand;
+        shouldResetDisplay = true;
+        waitingForExponent = false;
+      }
+
+      function handlePercent() {
+        let value = parseFloat(currentOperand);
+        if (isNaN(value)) return;
+        
+        if (previousOperand !== '' && operation) {
+          const base = parseFloat(previousOperand);
+          if (!isNaN(base)) {
+            value = (base * value) / 100;
+          }
+        } else {
+          value = value / 100;
+        }
+        
+        currentOperand = String(value);
+        shouldResetDisplay = true;
+        updateDisplay();
+      }
+
+      function handleEquals() {
+        if (waitingForExponent && exponentBase !== null) {
+          const expMatch = currentOperand.match(/[\d.]+$/);
+          if (expMatch) {
+            const exponent = parseFloat(expMatch[0]);
+            if (!isNaN(exponent)) {
+              currentOperand = String(Math.pow(exponentBase, exponent));
+              exponentBase = null;
+              waitingForExponent = false;
+              shouldResetDisplay = true;
+              updateDisplay();
+              return;
+            }
+          }
+          return;
+        }
+        
+        if (operation && previousOperand && !shouldResetDisplay) {
+          computeResult();
+        }
+      }
+
+      document.getElementById('clear').addEventListener('click', clearAll);
+      document.getElementById('clearEntry').addEventListener('click', clearEntry);
+      document.getElementById('backspace').addEventListener('click', backspace);
+      
+      document.getElementById('seven').addEventListener('click', function() { appendNumber('7'); });
+      document.getElementById('eight').addEventListener('click', function() { appendNumber('8'); });
+      document.getElementById('nine').addEventListener('click', function() { appendNumber('9'); });
+      document.getElementById('four').addEventListener('click', function() { appendNumber('4'); });
+      document.getElementById('five').addEventListener('click', function() { appendNumber('5'); });
+      document.getElementById('six').addEventListener('click', function() { appendNumber('6'); });
+      document.getElementById('one').addEventListener('click', function() { appendNumber('1'); });
+      document.getElementById('two').addEventListener('click', function() { appendNumber('2'); });
+      document.getElementById('three').addEventListener('click', function() { appendNumber('3'); });
+      document.getElementById('zero').addEventListener('click', function() { appendNumber('0'); });
+      document.getElementById('decimal').addEventListener('click', function() { appendNumber('.'); });
+
+      document.getElementById('add').addEventListener('click', function() { chooseOperation('add'); });
+      document.getElementById('subtract').addEventListener('click', function() { chooseOperation('subtract'); });
+      document.getElementById('multiply').addEventListener('click', function() { chooseOperation('multiply'); });
+      document.getElementById('divide').addEventListener('click', function() { chooseOperation('divide'); });
+      document.getElementById('percent').addEventListener('click', handlePercent);
+      
+      document.getElementById('sqrt').addEventListener('click', function() { computeUnary('sqrt'); });
+      document.getElementById('square').addEventListener('click', function() { computeUnary('square'); });
+      document.getElementById('factorial').addEventListener('click', function() { computeUnary('factorial'); });
+      document.getElementById('power').addEventListener('click', startPower);
+      document.getElementById('pi').addEventListener('click', appendPi);
+      
+      document.getElementById('equals').addEventListener('click', handleEquals);
+
+      display.addEventListener('focus', function() { display.blur(); });
+      updateDisplay();
+    })();
+  </script>
+</body>
+</html>
