@@ -5,7 +5,6 @@
 *A calculator that doesn't look like it's from 2005*
 
 [![Live Demo](https://img.shields.io/badge/DEMO-Visit%20Site-ff6b6b?style=for-the-badge&logo=vercel&logoColor=white)](https://modoma8.github.io/CalculatorDoma/)
-[![License](https://img.shields.io/badge/LICENSE-MIT-blue?style=for-the-badge)](LICENSE)
 [![Made With](https://img.shields.io/badge/MADE%20WITH-PURE%20CODE-orange?style=for-the-badge&logo=html5)](https://github.com/modoma8/CalculatorDoma)
 [![Stars](https://img.shields.io/github/stars/modoma8/CalculatorDoma?style=for-the-badge&color=yellow)](https://github.com/modoma8/CalculatorDoma/stargazers)
 
