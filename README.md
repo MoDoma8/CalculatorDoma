@@ -81,14 +81,3 @@ Because normal calculators are boring. This one has **glass**, **gradients**, an
 **No dependencies. No build step. No npm nightmares.**
 
 </div>
-
----
-
-## 📦 Installation
-
-Literally just open the file:
-
-```bash
-git clone https://github.com/modoma8/CalculatorDoma.git
-cd CalculatorDoma
-open index.html
