@@ -70,15 +70,6 @@ Because normal calculators are boring. This one has **glass**, **gradients**, an
 
 ---
 
-## 📱 Screenshots
-
-<div align="center">
-<img src="screenshots/desktop.png" alt="Desktop View" width="400">
-<img src="screenshots/mobile.png" alt="Mobile View" width="200">
-</div>
-
----
-
 ## 🛠️ Tech Stack
 
 <div align="center">
