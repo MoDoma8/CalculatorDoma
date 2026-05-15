@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/modoma8/CalculatorDoma/main/preview.png" alt="CalculatorDoma Banner" width="100%">
-
 # 🧮 CalculatorDoma
 
 *A calculator that doesn't look like it's from 2005*
